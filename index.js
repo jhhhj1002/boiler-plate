@@ -10,4 +10,22 @@ mongoose.connect('mongodb+srv://jhhhj1002:Jh742511!!@boilerplate.wkqzc.mongodb.n
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
+
+
+const bodyParser = require('body-parser');
+const {User} = require("./models/User");
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.post('/register', (req,res) => {
+    // client에서 회원가입시 필요한 정보들을 가져와서 데이터베이스에 넣어줌
+    const user = new User(req.body)
+    user.save((err,userInfo) => { // mongeDB 메소드
+        if(err) return res.json({success: false,err})
+        return res.status(200).json({
+            success : true
+        })
+    })
+})
+
+
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
