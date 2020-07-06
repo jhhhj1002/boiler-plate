@@ -32,6 +32,8 @@ app.post('/register', (req,res) => { // http://localhost:3000/register 에서 po
 })
 
 //로그인
+const cookieParser = require('cookie-parser')
+app.user(cookieParser())
 app.post('/login',(re1,res) => {
     //요청된 이메일 데이터베이스에 있는지확인
     User.findOne({email:req.body.email}, (err,user)=>{
@@ -49,8 +51,10 @@ app.post('/login',(re1,res) => {
             //토큰 생성
             user.generateToken((err, user)=> {
                 if(err) return res.status(400).send(err);
-
                 //토큰을 저장한다. 어디에? 쿠키,로컬 등등.. -> 이 강의에서는 쿠키에 저장
+                res.cookie('x_auth',user.token)
+                .status(200)
+                .json({loginSuccess: true, userId: user._id})
             })
         })
     })
