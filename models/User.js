@@ -32,6 +32,24 @@ const userSchema = mongoose.Schema({
 
 })
 
+const bcrypt = require('bcrypt')
+const saltRounds = 10
+userSchema.pre('save',function(next){
+    var user = this
+    // 비밀번호 암호화 시킨 후 save에 보냄 (비밀번호 변경하는 경우에만)
+    if(user.isModified('password')){
+        bcrypt.genSalt(saltRounds,function(err,salt){
+            if(err) return next(err)
+    
+            bcrypt.hash(user.password,salt,function(err,hash){
+                if(err) return next(err)
+                user.password = hash
+                next()
+            })
+        })
+    }
+})
+
 const User = mongoose.model('User',userSchema)
 
 module.exports = {User}
