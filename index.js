@@ -46,13 +46,16 @@ app.post('/login',(re1,res) => {
             if(!isMatch)
             return res.json({loginSuccess:false, message:"비밀번호가 틀렸습니다."})
             
+            //토큰 생성
             user.generateToken((err, user)=> {
-                
+                if(err) return res.status(400).send(err);
+
+                //토큰을 저장한다. 어디에? 쿠키,로컬 등등.. -> 이 강의에서는 쿠키에 저장
             })
         })
     })
 
-    //토큰 생성
+
 })
 
 

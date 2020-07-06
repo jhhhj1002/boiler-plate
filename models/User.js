@@ -61,6 +61,21 @@ userSchema.methods.comparePassword = function(plainPassword, cb){
     })
 }
 
+var jwt = require('jsonwebtoken');
+userSchema.methods.generateToken = function(cb){
+    var user = this
+    //jsonwebtoken 이용해서 token 생성
+    var token = jwt.sign(user._id, 'secretToken');
+    // user._id, + 'secretToken' = token
+    // -> 
+    // 'secretToken' -> user._id
+    user.token = token
+    user.save(function(err,user){
+        if(err) return cb(err)
+        cb(null,user) // null -> 에러가 없다는 뜻
+    })
+}
+
 const User = mongoose.model('User',userSchema)
 
 module.exports = {User}
