@@ -2,7 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-function App() {
+function App() {  // 페이지 렌더링 해야하는 부분 - index.js 와 나타나는 부분
   return (
     <div className="App">
       <header className="App-header">
